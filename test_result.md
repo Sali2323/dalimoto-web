@@ -101,3 +101,79 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Create a premium, modern, trustworthy website for DaliMoto tire and auto repair shop in Kladno. Dark blue/black palette with orange accents, Next.js 15, Tailwind, Framer Motion. Sections: Hero, Services, Pricing, Why Us, Reviews, 4-step Process, FAQ, Contact with Google Maps embed and form. Must achieve 100% content parity with original dalimoto.cz."
+
+backend:
+  - task: "Contact form submission API (POST /api/contact)"
+    implemented: true
+    working: true
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Implemented POST /api/contact saving { name, phone, email, service, message } to MongoDB 'contacts' collection with uuid id and createdAt timestamp. Requires name and phone (returns 400 otherwise). Needs validation of happy path + error path."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED & VERIFIED: POST /api/contact works correctly. Valid submission returns 200 with { ok: true, id: uuid }. Missing name returns 400 with Czech error 'Jméno a telefon jsou povinné'. Missing phone returns 400 with same error. Data persists to MongoDB 'contacts' collection. All validation working as expected."
+
+  - task: "Health check & list endpoints (GET /api/health, GET /api/contacts)"
+    implemented: true
+    working: true
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "GET /api/ and /api/health return service info. GET /api/contacts returns recent contacts (no _id). Verify both work and contacts list reflects newly inserted records."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED & VERIFIED: GET /api/health and GET /api/ both return 200 with { ok: true, service: 'DaliMoto API', time: ISO }. GET /api/contacts returns 200 with contacts array, no _id field leaked, correctly shows inserted records. GET /api/unknown returns 404. OPTIONS /api/contact returns 204 with CORS headers. All endpoints working perfectly."
+
+frontend:
+  - task: "Premium landing page rendering with all sections"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Verified via screenshot tool — Hero, Pricing (expanded), Products, Why Us, 4-step process, Reviews, FAQ, Contact form + Google Maps, Footer all render correctly with dark navy/orange theme. Cookie banner visible."
+
+  - task: "GDPR Cookie Banner with localStorage persistence"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "CookieBanner uses localStorage key 'dalimoto-cookies'. Shows only when not set; click 'Rozumím' sets it and hides banner."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 2
+  run_ui: false
+
+test_plan:
+  current_focus: []
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "main"
+      message: "Please test the backend /api routes for the DaliMoto site. Verify: (1) GET /api/health returns 200 with ok:true. (2) POST /api/contact with valid { name, phone, email, service, message } returns 200 with ok:true and id. (3) POST /api/contact without name or phone returns 400. (4) GET /api/contacts returns the inserted record. MongoDB is local; uses MONGO_URL + DB_NAME env vars. Base URL: use process.env.NEXT_PUBLIC_BASE_URL from /app/.env appended with /api."
+    - agent: "testing"
+      message: "✅ BACKEND TESTING COMPLETE - ALL TESTS PASSED (8/8). Tested all API endpoints: GET /api/health ✓, GET /api/ ✓, POST /api/contact (valid/invalid) ✓, GET /api/contacts ✓, GET /api/unknown (404) ✓, OPTIONS /api/contact (CORS) ✓. MongoDB connection working, data persists correctly, no _id leaked, validation working. All backend functionality is production-ready. No issues found."

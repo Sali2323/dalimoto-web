@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import {
   Phone, MapPin, Clock, Star, Wrench, Gauge, Bike, Truck, Snowflake, Droplets, Settings, Warehouse,
-  CheckCircle2, ChevronDown, Menu, X, ShieldCheck, Sparkles, Users, Award, ArrowRight, Calendar, MessageSquare, Navigation, Mail
+  CheckCircle2, ChevronDown, Menu, X, ShieldCheck, Sparkles, Users, Award, ArrowRight, Calendar, MessageSquare, Navigation, Mail,
+  Zap, Package, Filter, Fuel, Disc, CircleDot, FileText
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -17,26 +18,80 @@ import { toast } from 'sonner'
 
 const PHONE = '739 263 617'
 const PHONE_LINK = 'tel:+420739263617'
+const EMAIL = 'DaliborJekl@dalimoto.cz'
+const EMAIL_LINK = 'mailto:DaliborJekl@dalimoto.cz'
+const CONTACT_PERSON = 'Dalibor Jekl'
+const ADDRESS_STREET = '5. května 2679'
+const ADDRESS_CITY = '272 01 Kladno – Sítná'
+const ADDRESS_NOTE = 'u vjezdu do garážového komplexu u GDM'
+const HOURS_WEEKDAYS = 'Po–Pá 9:00–18:00'
+const HOURS_NOTE = 'Po dohodě možno i mimo pracovní dobu'
 
 const services = [
-  { icon: Wrench, title: 'Přezutí pneumatik', desc: 'Kompletní přezutí osobních vozidel rychle a šetrně.' },
-  { icon: Gauge, title: 'Vyvážení kol', desc: 'Moderní přesné vyvážení pro plynulou jízdu.' },
-  { icon: Bike, title: 'Pneuservis motocyklů', desc: 'Přezutí a servis motocyklových kol.' },
-  { icon: Truck, title: 'Pneuservis dodávek', desc: 'Kompletní servis dodávkových vozidel.' },
-  { icon: Snowflake, title: 'Plnění klimatizací', desc: 'Kontrola, čištění a doplnění klimatizace.' },
-  { icon: Droplets, title: 'Výměna oleje', desc: 'Rychlá výměna motorového oleje a filtrů.' },
-  { icon: Settings, title: 'Drobné opravy', desc: 'Základní servisní práce a opravy defektů.' },
-  { icon: Warehouse, title: 'Uskladnění pneumatik', desc: 'Bezpečné sezónní uskladnění Vašich pneu.' },
+  { icon: Wrench, title: 'Kompletní přezutí pneumatik', desc: 'Osobní vozidla, dodávky i motocykly. Rychle, šetrně a profesionálně.' },
+  { icon: Gauge, title: 'Vyvážení kol', desc: 'Moderní přesné vyvážení pro plynulou a bezpečnou jízdu.' },
+  { icon: Bike, title: 'Pneuservis motocyklů', desc: 'Přezutí, vyvážení i kompletní montáž motocyklových kol.' },
+  { icon: Truck, title: 'Pneuservis dodávek', desc: 'Kompletní servis dodávkových vozidel a užitkových aut.' },
+  { icon: Snowflake, title: 'Plnění klimatizací', desc: 'Kontrola těsnosti, čištění a doplnění chladiva R134a / R1234yf.' },
+  { icon: Droplets, title: 'Výměna oleje a kapalin', desc: 'Motorový olej, brzdová a chladící kapalina – vše na počkání.' },
+  { icon: Settings, title: 'Drobné opravy', desc: 'Brzdy, defekty, údržba motorových vozidel a příslušenství.' },
+  { icon: Warehouse, title: 'Uskladnění pneumatik', desc: 'Bezpečné sezónní uskladnění Vašich pneu v ideálních podmínkách.' },
 ]
 
-const pricing = [
-  { item: 'Kompletní přezutí osobního vozu 13–15"', price: 'od 750 Kč' },
-  { item: 'Kompletní přezutí 16"', price: 'od 850 Kč' },
-  { item: 'Kompletní přezutí 17"', price: 'od 950 Kč' },
-  { item: 'Kompletní přezutí 18"', price: 'od 1 050 Kč' },
-  { item: 'Vyvážení kol', price: 'od 50 Kč' },
-  { item: 'Oprava defektu', price: 'od 300 Kč' },
-  { item: 'Přezutí motocyklu', price: 'od 250 Kč' },
+const pricingCategories = [
+  {
+    title: 'Osobní automobily',
+    icon: 'car',
+    items: [
+      { item: 'Komplet přezutí vč. vyvážení – kola 13"–15"', price: '750 Kč' },
+      { item: 'Komplet přezutí vč. vyvážení – kola 16"', price: '850 Kč' },
+      { item: 'Komplet přezutí vč. vyvážení – kola 17"', price: '950 Kč' },
+      { item: 'Komplet přezutí vč. vyvážení – kola 18"', price: '1 050 Kč' },
+      { item: 'Přehození kol vč. vyvážení 13"–15"', price: 'od 500 Kč' },
+      { item: 'Přehození kol vč. vyvážení 16"', price: '550 Kč' },
+      { item: 'Přehození kol vč. vyvážení 17"', price: '600 Kč' },
+      { item: 'Přehození kol vč. vyvážení 18"', price: '650 Kč' },
+    ],
+  },
+  {
+    title: 'Dodávky',
+    icon: 'van',
+    items: [
+      { item: 'Komplet přezutí dodávky vč. vyvážení', price: 'od 1 250 Kč' },
+      { item: 'Komplet přehození pneu dodávky vč. vyvážení', price: 'od 750 Kč' },
+    ],
+  },
+  {
+    title: 'Motocykly',
+    icon: 'moto',
+    items: [
+      { item: 'Přezutí motocyklu (1 kolo) vč. vyvážení', price: 'od 250 Kč' },
+      { item: 'Přezutí motocyklu vč. montáže (1 kolo) vč. vyvážení', price: 'od 450 Kč' },
+    ],
+  },
+  {
+    title: 'Drobné úkony',
+    icon: 'tool',
+    items: [
+      { item: 'Vyvážení kola', price: '50 Kč' },
+      { item: 'Demontáž kola', price: '50 Kč' },
+      { item: 'Montáž kola', price: '50 Kč' },
+      { item: 'Zutí kola', price: '50 Kč' },
+      { item: 'Nazutí kola', price: '50 Kč' },
+      { item: 'Oprava defektu', price: '300 Kč' },
+      { item: 'Přetěsnění disku', price: '25 Kč' },
+      { item: 'Broušení disku', price: '25 Kč' },
+      { item: 'Ventilek (1 ks)', price: '25 Kč' },
+      { item: 'Lepené závaží 5 g', price: '4 Kč' },
+    ],
+  },
+]
+
+const products = [
+  { icon: Package, title: 'Použité díly', desc: 'Pečlivě prověřené použité díly za výhodné ceny.' },
+  { icon: Fuel, title: 'Motocyklové oleje MOTUL', desc: 'Špičkové motocyklové oleje značky MOTUL skladem.' },
+  { icon: Droplets, title: 'Motorové oleje AUTO', desc: 'Široký výběr motorových olejů pro osobní vozy.' },
+  { icon: Filter, title: 'Filtry', desc: 'Olejové, vzduchové, palivové i kabinové filtry.' },
 ]
 
 const whyUs = [
@@ -60,10 +115,10 @@ const reviews = [
 ]
 
 const processSteps = [
-  { n: '01', title: 'Zavoláte nebo odešlete formulář', desc: 'Stačí krátký telefon nebo online formulář.' },
-  { n: '02', title: 'Domluvíme termín', desc: 'Najdeme co nejrychlejší volný termín.' },
-  { n: '03', title: 'Přijedete do servisu', desc: 'Na adresu 5. května 2679, Kladno.' },
-  { n: '04', title: 'Provedeme servis', desc: 'Na počkání nebo dle dohody.' },
+  { n: '01', title: 'Zavoláte nebo napíšete e-mail', desc: 'Stačí krátký telefon, e-mail nebo online formulář. Objednání NONSTOP.' },
+  { n: '02', title: 'Domluvíme termín', desc: 'Najdeme co nejrychlejší volný termín – potvrdíme zpětnou zprávou.' },
+  { n: '03', title: 'Přijedete do servisu', desc: '5. května 2679, Kladno-Sítná (u vjezdu do garážového komplexu u GDM).' },
+  { n: '04', title: 'Provedeme servis', desc: 'Na počkání nebo dle dohody, vč. uskladnění pneu do další sezóny.' },
 ]
 
 const faqs = [
@@ -158,9 +213,12 @@ function Hero() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Badge className="bg-orange-500/15 text-orange-400 border border-orange-500/30 px-3 py-1 mb-6 hover:bg-orange-500/20">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="flex flex-wrap items-center gap-2 mb-6">
+            <Badge className="bg-orange-500/15 text-orange-400 border border-orange-500/30 px-3 py-1 hover:bg-orange-500/20">
               <Star className="h-3 w-3 mr-1.5 fill-orange-400" /> 4,8/5 · 46+ recenzí na Google
+            </Badge>
+            <Badge className="bg-green-500/15 text-green-400 border border-green-500/30 px-3 py-1 hover:bg-green-500/20">
+              <Zap className="h-3 w-3 mr-1.5 fill-green-400" /> Objednání NONSTOP
             </Badge>
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-balance">
@@ -193,7 +251,7 @@ function Hero() {
             </a>
             <div className="flex items-center gap-2 text-sm text-white/60">
               <Clock className="h-4 w-4 text-orange-400" />
-              Po–Pá 8:00–17:00 · So 8:00–12:00
+              {HOURS_WEEKDAYS} · {HOURS_NOTE}
             </div>
           </motion.div>
         </div>
@@ -256,13 +314,15 @@ function Services() {
 }
 
 function Pricing() {
+  const [activeTab, setActiveTab] = useState(0)
+  const cat = pricingCategories[activeTab]
   return (
     <section id="cenik" className="relative py-24 lg:py-32 bg-gradient-to-b from-[#070b18] to-[#0a1027]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-5">
-            <SectionHeader eyebrow="Ceník služeb" title="Transparentní ceny bez skrytých poplatků" desc="Uvedené ceny jsou orientační. Konečná cena závisí na typu vozidla a použitých materiálech. Vždy vám cenu předem potvrdíme." />
-            <div className="flex flex-col sm:flex-row gap-3">
+            <SectionHeader eyebrow="Kompletní ceník" title="Transparentní ceny bez skrytých poplatků" desc="Kompletní orientační ceník přímo z naší dílny. U elektronových kol se navíc účtuje lepené závaží. Konečnou cenu Vám vždy předem potvrdíme." />
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <Button asChild size="lg" className="bg-orange-500 hover:bg-orange-600">
                 <a href={PHONE_LINK}><Phone className="h-4 w-4 mr-2" /> Vyžádat cenu</a>
               </Button>
@@ -270,27 +330,87 @@ function Pricing() {
                 <a href="#kontakt">Online formulář</a>
               </Button>
             </div>
+            <div className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-4 flex items-start gap-3">
+              <Sparkles className="h-5 w-5 text-orange-400 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-white/75 leading-relaxed">
+                <strong className="text-white">Tip:</strong> U přezutí kompletních kol vč. vyvážení je v ceně i nazutí, zutí, demontáž a montáž. Lepené závaží je účtováno zvlášť pouze u elektronových kol.
+              </div>
+            </div>
           </div>
           <div className="lg:col-span-7">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden backdrop-blur-sm">
+            <div className="flex flex-wrap gap-2 mb-4">
+              {pricingCategories.map((c, i) => (
+                <button
+                  key={c.title}
+                  onClick={() => setActiveTab(i)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+                    activeTab === i
+                      ? 'bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-500/20'
+                      : 'bg-white/[0.03] border-white/10 text-white/70 hover:bg-white/[0.06] hover:text-white'
+                  }`}
+                >
+                  {c.title}
+                </button>
+              ))}
+            </div>
+            <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden backdrop-blur-sm">
               <div className="px-6 py-4 border-b border-white/10 bg-white/[0.02] flex items-center justify-between">
-                <div className="text-sm font-semibold uppercase tracking-wider text-white/80">Služba</div>
+                <div className="text-sm font-semibold uppercase tracking-wider text-white/80">{cat.title}</div>
                 <div className="text-sm font-semibold uppercase tracking-wider text-orange-400">Cena</div>
               </div>
               <ul className="divide-y divide-white/5">
-                {pricing.map((p) => (
-                  <li key={p.item} className="px-6 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
-                    <span className="text-white/85 group-hover:text-white">{p.item}</span>
-                    <span className="text-orange-400 font-bold tabular-nums whitespace-nowrap pl-4">{p.price}</span>
+                {cat.items.map((p) => (
+                  <li key={p.item} className="px-6 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors group gap-4">
+                    <span className="text-white/85 group-hover:text-white text-sm sm:text-base">{p.item}</span>
+                    <span className="text-orange-400 font-bold tabular-nums whitespace-nowrap">{p.price}</span>
                   </li>
                 ))}
               </ul>
               <div className="px-6 py-4 border-t border-white/10 bg-orange-500/5 flex items-start gap-2">
                 <Sparkles className="h-4 w-4 text-orange-400 mt-0.5 flex-shrink-0" />
-                <p className="text-xs text-white/70 leading-relaxed">Cena se může lišit podle typu vozidla a použitých materiálů. Pro přesnou cenovou nabídku nás kontaktujte.</p>
+                <p className="text-xs text-white/70 leading-relaxed">Cena se může lišit podle typu vozidla a použitých materiálů. U elektronových kol se navíc účtuje lepené závaží.</p>
               </div>
             </motion.div>
           </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Products() {
+  return (
+    <section id="produkty" className="relative py-24 lg:py-32 bg-[#070b18]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader eyebrow="Náš sortiment" title="Prodej náhradních dílů, olejů a filtrů" desc="Kromě servisních služeb u nás zakoupíte i kvalitní spotřební díly a oleje pro Váš automobil i motocykl. Vše skladem nebo na objednávku." />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {products.map((p, i) => (
+            <motion.div key={p.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.4, delay: i * 0.05 }}>
+              <Card className="group h-full bg-white/[0.03] border-white/10 hover:border-orange-500/40 hover:bg-white/[0.05] transition-all duration-300 hover:-translate-y-1">
+                <CardContent className="p-6">
+                  <div className="h-12 w-12 rounded-xl bg-orange-500/10 border border-orange-500/20 grid place-items-center mb-5 group-hover:bg-orange-500 group-hover:border-orange-500 transition-all duration-300">
+                    <p.icon className="h-6 w-6 text-orange-400 group-hover:text-white transition-colors" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white mb-2">{p.title}</h3>
+                  <p className="text-sm text-white/60 leading-relaxed">{p.desc}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+        <div className="mt-10 rounded-2xl border border-white/10 bg-gradient-to-r from-orange-500/10 to-orange-600/5 p-6 lg:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="h-12 w-12 rounded-xl bg-orange-500/20 border border-orange-500/30 grid place-items-center flex-shrink-0">
+              <MessageSquare className="h-6 w-6 text-orange-400" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold text-white mb-1">Dotaz na prodejce</div>
+              <p className="text-sm text-white/70 leading-relaxed max-w-2xl">Potřebujete poradit nebo zjistit cenu zboží či služby? Napište nám e-mail – obratem se Vám ozveme s nabídkou a potvrzením termínu.</p>
+            </div>
+          </div>
+          <Button asChild size="lg" className="bg-orange-500 hover:bg-orange-600 whitespace-nowrap">
+            <a href={EMAIL_LINK}><Mail className="h-4 w-4 mr-2" /> Napsat e-mail</a>
+          </Button>
         </div>
       </div>
     </section>
