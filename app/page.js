@@ -22,20 +22,26 @@ const EMAIL = 'DaliborJekl@dalimoto.cz'
 const EMAIL_LINK = 'mailto:DaliborJekl@dalimoto.cz'
 const CONTACT_PERSON = 'Dalibor Jekl'
 const ADDRESS_STREET = '5. května 2679'
-const ADDRESS_CITY = '272 01 Kladno – Sítná'
+const ADDRESS_CITY = '272 01 Kladno – Kročehlavy'
 const ADDRESS_NOTE = 'u vjezdu do garážového komplexu u GDM'
-const HOURS_WEEKDAYS = 'Po–Pá 9:00–18:00'
+const HOURS_WEEKDAYS = 'Po–Pá 8:00–17:00'
+const HOURS_SATURDAY = 'So 8:00–12:00'
 const HOURS_NOTE = 'Po dohodě možno i mimo pracovní dobu'
+const RATING = '4,8'
+const REVIEWS_COUNT = '46+'
+const MAPS_URL = 'https://www.google.com/maps/dir/?api=1&destination=DaliMoto+5.+května+2679+Kladno'
 
 const services = [
-  { icon: Wrench, title: 'Kompletní přezutí pneumatik', desc: 'Osobní vozidla, dodávky i motocykly. Rychle, šetrně a profesionálně.' },
-  { icon: Gauge, title: 'Vyvážení kol', desc: 'Moderní přesné vyvážení pro plynulou a bezpečnou jízdu.' },
-  { icon: Bike, title: 'Pneuservis motocyklů', desc: 'Přezutí, vyvážení i kompletní montáž motocyklových kol.' },
-  { icon: Truck, title: 'Pneuservis dodávek', desc: 'Kompletní servis dodávkových vozidel a užitkových aut.' },
+  { icon: Wrench, title: 'Přezutí osobních vozidel', desc: 'Rychlé a šetrné přezutí osobních automobilů včetně vyvážení a kontroly tlaku.' },
+  { icon: Bike, title: 'Přezutí motocyklů', desc: 'Specializovaný pneuservis motocyklových kol – přezutí, vyvážení i montáž.' },
+  { icon: Truck, title: 'Přezutí dodávek', desc: 'Kompletní pneuservis dodávkových a užitkových vozidel do 3,5 t.' },
+  { icon: Gauge, title: 'Vyvážení kol', desc: 'Moderní přesné dynamické vyvážení pro plynulou a bezpečnou jízdu.' },
+  { icon: CircleDot, title: 'Opravy defektů', desc: 'Profesionální opravy průrazů a defektů na osobních i moto pneumatikách.' },
   { icon: Snowflake, title: 'Plnění klimatizací', desc: 'Kontrola těsnosti, čištění a doplnění chladiva R134a / R1234yf.' },
-  { icon: Droplets, title: 'Výměna oleje a kapalin', desc: 'Motorový olej, brzdová a chladící kapalina – vše na počkání.' },
-  { icon: Settings, title: 'Drobné opravy', desc: 'Brzdy, defekty, údržba motorových vozidel a příslušenství.' },
-  { icon: Warehouse, title: 'Uskladnění pneumatik', desc: 'Bezpečné sezónní uskladnění Vašich pneu v ideálních podmínkách.' },
+  { icon: Droplets, title: 'Výměna oleje', desc: 'Výměna motorového oleje a olejového filtru – kvalitní oleje skladem.' },
+  { icon: Fuel, title: 'Doplňování provozních kapalin', desc: 'Brzdová, chladící, převodová kapalina i AdBlue – vše na počkání.' },
+  { icon: Settings, title: 'Drobné opravy vozidel', desc: 'Brzdy, výfuky, žárovky, stěrače a další běžná údržba i drobné opravy.' },
+  { icon: Warehouse, title: 'Uskladnění pneumatik', desc: 'Bezpečné sezónní uskladnění Vašich pneu v ideálních podmínkách dílny.' },
 ]
 
 const pricingCategories = [
