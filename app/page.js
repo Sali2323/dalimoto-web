@@ -135,10 +135,13 @@ const faqs = [
   { q: 'Lze uskladnit pneumatiky?', a: 'Samozřejmě. Nabízíme bezpečné sezónní uskladnění pneumatik v ideálních podmínkách. Cenu vám rádi sdělíme po telefonu.' },
 ]
 
-const heroImg = 'https://images.unsplash.com/photo-1655198739321-edc210858ab5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHw0fHx0aXJlJTIwc2VydmljZXxlbnwwfHx8YmxhY2t8MTc4MDM1Njk1Mnww&ixlib=rb-4.1.0&q=85'
-const img2 = 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzN8MHwxfHNlYXJjaHwzfHxjYXIlMjByZXBhaXJ8ZW58MHx8fGJsYWNrfDE3ODAzNTY5NjN8MA&ixlib=rb-4.1.0&q=85'
-const img3 = 'https://images.unsplash.com/photo-1613214036979-1c6a7e0cf677?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTV8MHwxfHNlYXJjaHwyfHx0aXJlJTIwc2VydmljZXxlbnwwfHx8YmxhY2t8MTc4MDM1Njk1Mnww&ixlib=rb-4.1.0&q=85'
-const img4 = 'https://images.unsplash.com/photo-1609511583488-e13c95c04aa0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODF8MHwxfHNlYXJjaHwzfHxtZWNoYW5pYyUyMHdoZWVsfGVufDB8fHxibGFja3wxNzgwMzU2OTUyfDA&ixlib=rb-4.1.0&q=85'
+const heroImg = 'https://images.unsplash.com/photo-1708449474154-e76585464b5e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwxfHx0aXJlJTIwbWVjaGFuaWN8ZW58MHx8fGJsYWNrfDE3ODAzNjEzOTJ8MA&ixlib=rb-4.1.0&q=85'
+const galleryImgs = [
+  { src: 'https://images.pexels.com/photos/6870316/pexels-photo-6870316.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', alt: 'Mechanik při přezutí pneumatiky', label: 'Přezutí na počkání' },
+  { src: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHxjYXIlMjB3b3Jrc2hvcHxlbnwwfHx8YmxhY2t8MTc4MDM2MTM5MXww&ixlib=rb-4.1.0&q=85', alt: 'Moderní autoservis a dílna DaliMoto', label: 'Moderní dílna' },
+  { src: 'https://images.pexels.com/photos/34240236/pexels-photo-34240236.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', alt: 'Pneuservis motocyklů – přezutí motocyklového kola', label: 'Pneuservis moto' },
+  { src: 'https://images.unsplash.com/photo-1571335746824-742511d49bce?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwxfHx0aXJlJTIwc3RhY2t8ZW58MHx8fGJsYWNrfDE3ODAzNjEzOTl8MA&ixlib=rb-4.1.0&q=85', alt: 'Uskladnění pneumatik – sezónní úschova', label: 'Uskladnění pneu' },
+]
 
 function Nav() {
   const [open, setOpen] = useState(false)
@@ -490,6 +493,36 @@ function Reviews() {
   )
 }
 
+function Gallery() {
+  return (
+    <section className="relative py-20 lg:py-28 bg-[#070b18] overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader eyebrow="Naše dílna" title="Profesionální zázemí, na které se můžete spolehnout" desc="Moderní vybavení, čistá dílna a pečlivá práce na každém kole." />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+          {galleryImgs.map((g, i) => (
+            <motion.div
+              key={g.src}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className={`group relative overflow-hidden rounded-2xl border border-white/10 ${i === 0 ? 'lg:col-span-2 lg:row-span-2 aspect-square lg:aspect-auto' : 'aspect-square'}`}
+            >
+              <img src={g.src} alt={g.alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#070b18] via-[#070b18]/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-5">
+                <div className="text-xs uppercase tracking-[0.18em] text-orange-400 font-semibold mb-1">DaliMoto</div>
+                <div className="text-white font-bold text-base lg:text-lg leading-tight">{g.label}</div>
+              </div>
+              <div className="absolute inset-0 ring-0 group-hover:ring-2 ring-orange-500/50 rounded-2xl transition-all duration-300" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Process() {
   return (
     <section className="relative py-24 lg:py-32 bg-gradient-to-b from-[#070b18] to-[#0a1027] overflow-hidden">
@@ -757,6 +790,7 @@ function App() {
       <Pricing />
       <WhyUs />
       <Reviews />
+      <Gallery />
       <Process />
       <FAQSection />
       <Contact />
